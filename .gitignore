@@ -1,0 +1,47 @@
+# Build directories
+target/
+out/
+build/
+
+# Maven files
+*.jar
+*.war
+*.ear
+*.class
+*.original
+
+# Eclipse and IntelliJ IDEA files
+*.project
+*.classpath
+.idea/
+*.iml
+.vscode/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+*.log
+
+# IDE specific files
+*.log
+*.swp
+*.swo
+
+# Maven Wrapper
+.mvn/
+mvnw
+mvnw.cmd
+mvnw.cmd:Zone.Identifier
+
+# Spring specific files
+spring-boot-loader/
+spring-boot-runner/
+
+# Test output
+surefire-reports/
+generated-sources/
+generated-test-sources/
+
+# Any other temporary files
+*.tmp
+*.temp
