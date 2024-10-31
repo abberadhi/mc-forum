@@ -12,7 +12,7 @@ public interface PostRepository extends JpaRepository<PostEntity, Long> {
     
     // Custom query methods can be defined here
 
-    List<PostEntity> findByUserId(Long userId); // Find posts by user ID
+    // List<PostEntity> findByUserId(Long userId); // Find posts by user ID
 
     List<PostEntity> findByTitleContaining(String title); // Find posts by title containing a keyword
 

@@ -26,9 +26,9 @@ public class PostService {
         return postRepository.findById(id).orElse(null); // Optional handling
     }
 
-    public List<PostEntity> getPostsByUserId(Long userId) {
-        return postRepository.findByUserId(userId);
-    }
+    // public List<PostEntity> getPostsByUserId(Long userId) {
+    //     return postRepository.findByUserId(userId);
+    // }
 
     public PostEntity createPost(PostEntity post) {
         return postRepository.save(post);

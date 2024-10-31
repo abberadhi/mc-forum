@@ -39,11 +39,11 @@ public class PostController {
                               new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<PostEntity>> getPostsByUserId(@PathVariable Long userId) {
-        List<PostEntity> posts = postService.getPostsByUserId(userId);
-        return new ResponseEntity<>(posts, HttpStatus.OK);
-    }
+    // @GetMapping("/user/{userId}")
+    // public ResponseEntity<List<PostEntity>> getPostsByUserId(@PathVariable Long userId) {
+    //     List<PostEntity> posts = postService.getPostsByUserId(userId);
+    //     return new ResponseEntity<>(posts, HttpStatus.OK);
+    // }
 
     @PostMapping
     public ResponseEntity<PostEntity> createPost(@RequestBody PostEntity post) {

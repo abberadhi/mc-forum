@@ -27,9 +27,9 @@ public class CommentEntity {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    // @ManyToOne(fetch = FetchType.LAZY)
+    // @JoinColumn(name = "user_id", nullable = false)
+    // private User user;
 
     // Post reference
     @ManyToOne(fetch = FetchType.LAZY)
@@ -70,13 +70,13 @@ public class CommentEntity {
         this.commentContent = commentContent;
     }
 
-    public User getUser() {
-        return user;
-    }
+    // public User getUser() {
+    //     return user;
+    // }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+    // public void setUser(User user) {
+    //     this.user = user;
+    // }
 
     public CommentEntity getParentCommentEntity() {
         return parentCommentEntity;
