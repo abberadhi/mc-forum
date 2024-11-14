@@ -102,6 +102,14 @@ public class PostEntity {
         this.updatedAt = updatedAt;
     }
 
+    public Set<TagEntity> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<TagEntity> tags) {
+        this.tags = tags;
+    }
+
     // public User getUser() {
     //     return user;
     // }

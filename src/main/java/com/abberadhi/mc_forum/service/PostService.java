@@ -1,22 +1,28 @@
 package com.abberadhi.mc_forum.service;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.abberadhi.mc_forum.model.PostEntity;
+import com.abberadhi.mc_forum.model.TagEntity;
 import com.abberadhi.mc_forum.repository.PostRepository;
+import com.abberadhi.mc_forum.repository.TagRepository;
 
 @Service
 public class PostService {
 
     private final PostRepository postRepository;
+    private final TagRepository tagRepository;
 
     @Autowired
-    public PostService(PostRepository postRepository) {
+    public PostService(PostRepository postRepository, TagRepository tagRepository) {
         this.postRepository = postRepository;
+        this.tagRepository = tagRepository;
     }
 
     public List<PostEntity> getAllPosts() {
@@ -32,6 +38,15 @@ public class PostService {
     // }
 
     public PostEntity createPost(PostEntity post) {
+        Set<TagEntity> tags = new HashSet<>();
+        for (TagEntity tag : post.getTags()) {
+            TagEntity tagEntity = tagRepository.findByName(tag.getName())
+                    .orElseGet(() -> tagRepository.save(new TagEntity(tag.getName())));
+            tags.add(tagEntity);
+        }
+
+        post.setTags(tags);
+
         return postRepository.save(post);
     }
 
