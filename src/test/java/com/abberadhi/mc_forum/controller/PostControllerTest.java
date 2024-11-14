@@ -7,10 +7,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.event.annotation.BeforeTestExecution;
 import org.springframework.test.web.servlet.MockMvc;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -49,13 +50,11 @@ public class PostControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").exists()) // Ensure ID is returned
                 .andExpect(jsonPath("$.title").value(post.getTitle()))
-                .andExpect(jsonPath("$.content").value(post.getContent()))
-                .andDo(print());
+                .andExpect(jsonPath("$.content").value(post.getContent()));
     }
 
     @Test
     public void getAllPost_ShouldReturnCreatedPost() throws Exception {
-		// post1
         PostEntity post = new PostEntity();
         post.setTitle("Sample Title");
         post.setContent("Sample Content");
@@ -64,7 +63,6 @@ public class PostControllerTest {
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(post)));
 
-		// post 2
 		PostEntity post2 = new PostEntity();
         post2.setTitle("Sample Title2");
         post2.setContent("Sample Content2");
@@ -73,8 +71,6 @@ public class PostControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(post2)));
 
-
-        // Perform GET request to fetch all posts and check if the post is returned
         mockMvc.perform(get("/api/posts"))
                 .andExpect(status().isOk())
 				.andExpect(jsonPath("$.[0].id").value(1))
@@ -82,7 +78,38 @@ public class PostControllerTest {
                 .andExpect(jsonPath("$.[0].title").value(post.getTitle()))
                 .andExpect(jsonPath("$.[1].title").value(post2.getTitle()))
                 .andExpect(jsonPath("$.[0].content").value(post.getContent()))
-                .andExpect(jsonPath("$.[1].content").value(post2.getContent()))
-                .andDo(print());
+                .andExpect(jsonPath("$.[1].content").value(post2.getContent()));
+    }
+
+    @Test
+    public void getPostById() throws Exception {
+        PostEntity post = new PostEntity();
+        post.setTitle("my Post");
+        post.setContent("Sample Content");
+
+        mockMvc.perform(post("/api/posts") 
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(objectMapper.writeValueAsString(post)));
+
+        mockMvc.perform(get("/api/posts/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").exists())
+                .andExpect(jsonPath("$.title").value(post.getTitle()))
+                .andExpect(jsonPath("$.content").value(post.getContent()));
+    }
+
+    @Test
+    @BeforeTestExecution()
+    public void deletePostById() throws Exception {
+        PostEntity post = new PostEntity();
+        post.setTitle("my Post");
+        post.setContent("Sample Content");
+
+        mockMvc.perform(post("/api/posts") 
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(objectMapper.writeValueAsString(post)));
+
+        mockMvc.perform(delete("/api/posts/1"))
+                .andExpect(status().isNoContent());
     }
 }
