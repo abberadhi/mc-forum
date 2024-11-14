@@ -11,6 +11,7 @@ import org.springframework.test.context.event.annotation.BeforeTestExecution;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -111,5 +112,47 @@ public class PostControllerTest {
 
         mockMvc.perform(delete("/api/posts/1"))
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @BeforeTestExecution()
+    public void updatePostById() throws Exception {
+        PostEntity initialPost = new PostEntity();
+        initialPost.setTitle("my Post");
+        initialPost.setContent("Sample Content");
+
+        mockMvc.perform(post("/api/posts") 
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(objectMapper.writeValueAsString(initialPost)));
+
+        // updating title
+        PostEntity updatePostTitle = new PostEntity();
+        updatePostTitle.setTitle("my Post");
+        
+        mockMvc.perform(patch("/api/posts/1")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(updatePostTitle)))
+            .andExpect(status().isAccepted());
+
+        mockMvc.perform(get("/api/posts/1"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").exists())
+            .andExpect(jsonPath("$.title").value(updatePostTitle.getTitle()))
+            .andExpect(jsonPath("$.content").value(initialPost.getContent()));
+
+        // updating content
+        PostEntity updateContentTitle = new PostEntity();
+        updateContentTitle.setContent("updated content");
+
+        mockMvc.perform(patch("/api/posts/1")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(updateContentTitle)))
+            .andExpect(status().isAccepted());
+
+        mockMvc.perform(get("/api/posts/1"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").exists())
+            .andExpect(jsonPath("$.title").value(updatePostTitle.getTitle()))
+            .andExpect(jsonPath("$.content").value(updateContentTitle.getContent()));
     }
 }

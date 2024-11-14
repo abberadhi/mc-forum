@@ -16,5 +16,7 @@ public interface PostRepository extends JpaRepository<PostEntity, Long> {
 
     List<PostEntity> findByTitleContaining(String title); // Find posts by title containing a keyword
 
+    List<PostEntity> findByTags_name(String tagName);
+
     // Add more query methods as needed
 }

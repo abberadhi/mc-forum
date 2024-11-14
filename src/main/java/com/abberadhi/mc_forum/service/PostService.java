@@ -1,5 +1,6 @@
 package com.abberadhi.mc_forum.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,5 +37,23 @@ public class PostService {
 
     public void deletePost(Long id) {
         postRepository.deleteById(id);
+    }
+
+    public void updatePost(Long id, PostEntity updatedPost) {
+        PostEntity post = postRepository.findById(id).orElseThrow(() -> new RuntimeException("Post not found")); // fix handling
+
+        // Update the fields
+        
+        if (updatedPost.getTitle() != null) {
+            post.setTitle(updatedPost.getTitle());
+        }
+
+        if (updatedPost.getContent() != null) {
+            post.setContent(updatedPost.getContent());
+        }
+
+        post.setUpdatedAt(LocalDateTime.now());
+
+        postRepository.save(post);
     }
 }
