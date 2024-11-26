@@ -48,6 +48,9 @@ public class PostService {
     public PostEntity createPost(PostEntity post) {
         Set<TagEntity> tags = new HashSet<>();
         for (TagEntity tag : post.getTags()) {
+            if ("".equals(tag.getName())) {
+                continue;
+            }
             TagEntity tagEntity = tagRepository.findByName(tag.getName())
                     .orElseGet(() -> tagRepository.save(new TagEntity(tag.getName())));
             tags.add(tagEntity);

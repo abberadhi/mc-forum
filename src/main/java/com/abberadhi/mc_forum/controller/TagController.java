@@ -31,8 +31,4 @@ public class TagController {
         List<TagEntity> tags = tagService.getAllTags();
         return new ResponseEntity<>(tags, HttpStatus.OK);
     }
-
-    public void getPostByTagId() {
-    }
-
 }
