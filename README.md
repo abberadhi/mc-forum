@@ -1,6 +1,11 @@
 # bike-forum
 Forum about motorcycles 
 
+# useful commands
+`docker-compose down -v` docker down and removes volumes
+`docker exec -it postgresdb bash` attach to db container
+`psql -h localhost -p 5432 -U postgresuser -d postgresdb` login to db
+
 ## TODO
 
 ### BE

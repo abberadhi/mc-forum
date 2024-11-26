@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.abberadhi.mc_forum.model.PostEntity;
@@ -28,8 +29,21 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PostEntity>> getAllPosts() {
-        List<PostEntity> posts = postService.getAllPosts();
+    public ResponseEntity<List<PostEntity>> getAllPosts(
+        @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber, 
+        @RequestParam(value = "title", required = false, defaultValue = "null") String titleSearch, 
+        @RequestParam(value = "tag", required = false, defaultValue = "null") String tagSearch) {
+
+        if ("null".equals(titleSearch)) {
+            titleSearch = null;
+        }
+        if ("null".equals(tagSearch)) {
+            tagSearch = null;
+        }
+        
+        pageNumber--;
+
+        List<PostEntity> posts = postService.getAllPosts(pageNumber, titleSearch, tagSearch);
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
