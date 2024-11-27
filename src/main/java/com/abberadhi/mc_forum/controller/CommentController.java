@@ -100,8 +100,9 @@ public class CommentController {
         dto.setCommentContent(commentEntity.getCommentContent());
         dto.setCreatedAt(commentEntity.getCreatedAt());
         dto.setUpvoteCount(commentEntity.getUpvoteCount());
-        dto.setParentCommentEntity(mapToCommentDTO(commentEntity.getParentCommentEntity())); // Recursive mapping for parent
-
+        if (commentEntity.getParentCommentEntity() != null) {
+            dto.setParent_id(commentEntity.getParentCommentEntity().getId()); 
+        }
         return dto;
     }
 }

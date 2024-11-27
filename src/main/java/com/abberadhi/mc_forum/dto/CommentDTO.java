@@ -6,7 +6,7 @@ public class CommentDTO {
     private Integer id;
     private String commentContent;
     private LocalDateTime createdAt;
-    private CommentDTO parentCommentEntity;
+    private Integer parent_id;
     private int upvoteCount;
 
     public int getUpvoteCount() {
@@ -25,14 +25,6 @@ public class CommentDTO {
         this.commentContent = commentContent;
     }
 
-    public CommentDTO getParentCommentEntity() {
-        return parentCommentEntity;
-    }
-
-    public void setParentCommentEntity(CommentDTO parentCommentEntity) {
-        this.parentCommentEntity = parentCommentEntity;
-    }
-
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -47,6 +39,14 @@ public class CommentDTO {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getParent_id() {
+        return parent_id;
+    }
+
+    public void setParent_id(int parent_id) {
+        this.parent_id = parent_id;
     }
 
     
