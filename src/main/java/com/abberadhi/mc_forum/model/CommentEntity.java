@@ -2,6 +2,9 @@ package com.abberadhi.mc_forum.model;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -34,6 +37,7 @@ public class CommentEntity {
     // Post reference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE) // Automatically adds "ON DELETE CASCADE" in the database schema
     private PostEntity postEntity;
 
     // Reply comment reference
