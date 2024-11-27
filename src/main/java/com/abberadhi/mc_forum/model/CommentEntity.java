@@ -37,12 +37,13 @@ public class CommentEntity {
     // Post reference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE) // Automatically adds "ON DELETE CASCADE" in the database schema
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private PostEntity postEntity;
 
     // Reply comment reference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_comment_id", nullable = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private CommentEntity parentCommentEntity;
 
     @Column(name = "upvote_count", nullable = false)

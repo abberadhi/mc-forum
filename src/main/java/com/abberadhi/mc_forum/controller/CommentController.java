@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -77,6 +78,16 @@ public class CommentController {
         CommentDTO createdCommentDTO = mapToCommentDTO(createdComment);
 
         return new ResponseEntity<>(createdCommentDTO, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCommentById(@PathVariable Long id) {
+        CommentEntity comment = commentService.getCommentById(id);
+        if (comment == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        commentService.deleteCommentById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     public CommentDTO mapToCommentDTO(CommentEntity commentEntity) {
