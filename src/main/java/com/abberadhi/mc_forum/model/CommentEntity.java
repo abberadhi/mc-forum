@@ -50,6 +50,7 @@ public class CommentEntity {
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
+        this.upvoteCount = 0;
     }
     
     // Getters and Setters for each field
