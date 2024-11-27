@@ -16,14 +16,16 @@ import com.abberadhi.mc_forum.repository.TagRepository;
 public class CommentService {
 
     private final PostRepository postRepository;
+    private final PostService postService;
     private final TagRepository tagRepository;
     private final CommentRepository commentRepository;
 
     @Autowired
-    public CommentService(PostRepository postRepository, TagRepository tagRepository, CommentRepository commentRepository) {
+    public CommentService(PostRepository postRepository, TagRepository tagRepository, CommentRepository commentRepository, PostService postService) {
         this.postRepository = postRepository;
         this.tagRepository = tagRepository;
         this.commentRepository = commentRepository;
+        this.postService = postService;
     }
 
     public List<TagEntity> getAllTags() {
@@ -35,5 +37,14 @@ public class CommentService {
         comment.setPostEntity(post);
 
         return commentRepository.save(comment);
+    }
+
+    public List<CommentEntity> getCommentsByPostId(Long id) {
+        PostEntity postEntity = postService.getPostById(id);
+        return commentRepository.findByPostEntity(postEntity);
+    }
+
+    public CommentEntity getCommentById(Long id) {
+        return commentRepository.findById(id).orElse(null);
     }
 }

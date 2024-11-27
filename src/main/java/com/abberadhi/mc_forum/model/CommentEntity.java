@@ -102,5 +102,13 @@ public class CommentEntity {
     public void setPostEntity(PostEntity postEntity) {
         this.postEntity = postEntity;
     }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 }
    

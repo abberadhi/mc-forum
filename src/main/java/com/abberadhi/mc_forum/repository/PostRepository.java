@@ -22,7 +22,6 @@ public interface PostRepository extends JpaRepository<PostEntity, Long> {
 
     List<PostEntity> findByTags_name(String tagName);
 
-    // @Query("SELECT p FROM PostEntity p JOIN p.tags t WHERE (:tagName IS NULL OR t.name = :tagName) AND (:postTitle IS NULL OR LOWER(p.title) LIKE CONCAT('%', LOWER(:postTitle), '%'))")
     @Query("SELECT DISTINCT p FROM PostEntity p " +
        "LEFT JOIN p.tags t " +
        "WHERE (:tagName IS NULL OR t.name = :tagName) " +
