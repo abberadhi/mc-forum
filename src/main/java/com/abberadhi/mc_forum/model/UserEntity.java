@@ -1,6 +1,10 @@
 package com.abberadhi.mc_forum.model;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,10 +12,16 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "user_entity")
+public class UserEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,8 +39,6 @@ public class User {
     @Column (nullable = false)
     private String password;
 
-    public User(){}
-
     // // Constructor with all fields (except ID since it is auto-generated)
     // public Users (String username, String description, LocalDateTime dateJoined, String password) {
     //     this.username = username;
@@ -38,6 +46,25 @@ public class User {
     //     this.dateJoined = dateJoined;
     //     this.password = password;
     // }
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        throw new UnsupportedOperationException("Unimplemented method 'getAuthorities'");
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
     // Getters and Setters
     public Integer getId() {
@@ -72,6 +99,7 @@ public class User {
         this.dateJoined = dateJoined;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
