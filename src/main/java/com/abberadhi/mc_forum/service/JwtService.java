@@ -18,7 +18,7 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtService {
 
-    private static final String SECRET_KEY = "F_6=!*{5lh{p0ddg?}m+N$69/_I%w=?\"W~WgQk-7}0}n_<IEq4^J<K1@UL`#u'8"; // TODO: should be hidden
+    private static final String SECRET_KEY = "qKemGQ4qh4MwPzyWsDfEKop2pRAdcwmfuiohsdfjknsdfauiohjasdfjoklsdfioj"; // TODO: should be hidden
     private static final int EXPIRATION_DATE_MILLIS = 1000 * 60 * 24;
 
     public String extractUsername(String token) {

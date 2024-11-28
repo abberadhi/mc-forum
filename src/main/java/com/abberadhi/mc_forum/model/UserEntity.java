@@ -11,6 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -46,6 +47,12 @@ public class UserEntity implements UserDetails {
     //     this.dateJoined = dateJoined;
     //     this.password = password;
     // }
+
+    @PrePersist
+    protected void onCreate() {
+        this.dateJoined = LocalDateTime.now();
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         throw new UnsupportedOperationException("Unimplemented method 'getAuthorities'");
