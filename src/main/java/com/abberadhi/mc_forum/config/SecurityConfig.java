@@ -22,11 +22,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-        .authorizeHttpRequests(requests -> requests
-                .requestMatchers("/auth/**", "/api/auth/**", "/error")
-                .permitAll()
-                .anyRequest()
-                .authenticated())
+        .authorizeHttpRequests(requests -> {
+            requests.requestMatchers("/auth/**", "/api/auth/**", "/error").permitAll();
+            requests.anyRequest().authenticated();
+        })
         .sessionManagement(management -> management
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authenticationProvider(authenticationProvider)
