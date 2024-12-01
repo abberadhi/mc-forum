@@ -17,6 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.abberadhi.mc_forum.model.PostEntity;
+import com.abberadhi.mc_forum.model.RegisterRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
@@ -26,16 +27,37 @@ public class PostControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-
     @Autowired
     private ObjectMapper objectMapper;
 
 	@Autowired
     private JdbcTemplate jdbcTemplate;
 
+    private String jwtToken;
+
 	@BeforeEach
-    public void cleanUp() {
+    public void setUp() throws Exception {
         jdbcTemplate.execute("TRUNCATE TABLE post_entity RESTART IDENTITY CASCADE");
+        jdbcTemplate.execute("TRUNCATE TABLE user_entity RESTART IDENTITY CASCADE");
+        // Register a user
+        RegisterRequest newUser = new RegisterRequest();
+        newUser.setUsername("user1337");
+        newUser.setPassword("user1337");
+
+        mockMvc.perform(post("/api/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(newUser)))
+                .andExpect(status().isOk());
+
+        String loginResponse = mockMvc.perform(post("/api/auth/authenticate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(newUser)))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        jwtToken = objectMapper.readTree(loginResponse).get("token").asText();
     }
 
     @Test
@@ -45,7 +67,8 @@ public class PostControllerTest {
         post.setContent("Sample Content");
 
         // Perform POST request to create the post
-        mockMvc.perform(post("/api/posts") 
+        mockMvc.perform(post("/api/posts")
+                .header("Authorization", "Bearer " + jwtToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(post)))
                 .andExpect(status().isCreated())
@@ -60,7 +83,8 @@ public class PostControllerTest {
         post.setTitle("Sample Title");
         post.setContent("Sample Content");
 
-        mockMvc.perform(post("/api/posts") 
+        mockMvc.perform(post("/api/posts")
+            .header("Authorization", "Bearer " + jwtToken)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(post)));
 
@@ -68,11 +92,12 @@ public class PostControllerTest {
         post2.setTitle("Sample Title2");
         post2.setContent("Sample Content2");
 
-        mockMvc.perform(post("/api/posts") 
+        mockMvc.perform(post("/api/posts")
+                .header("Authorization", "Bearer " + jwtToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(post2)));
 
-        mockMvc.perform(get("/api/posts"))
+        mockMvc.perform(get("/api/posts").header("Authorization", "Bearer " + jwtToken))
                 .andExpect(status().isOk())
 				.andExpect(jsonPath("$.[0].id").value(1))
                 .andExpect(jsonPath("$.[1].id").value(2))
@@ -88,11 +113,12 @@ public class PostControllerTest {
         post.setTitle("my Post");
         post.setContent("Sample Content");
 
-        mockMvc.perform(post("/api/posts") 
+        mockMvc.perform(post("/api/posts")
+            .header("Authorization", "Bearer " + jwtToken)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(post)));
 
-        mockMvc.perform(get("/api/posts/1"))
+        mockMvc.perform(get("/api/posts/1").header("Authorization", "Bearer " + jwtToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").exists())
                 .andExpect(jsonPath("$.title").value(post.getTitle()))
@@ -106,12 +132,13 @@ public class PostControllerTest {
         post.setTitle("my Post");
         post.setContent("Sample Content");
 
-        mockMvc.perform(post("/api/posts") 
+        mockMvc.perform(post("/api/posts")
+            .header("Authorization", "Bearer " + jwtToken)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(post)));
 
-        mockMvc.perform(delete("/api/posts/1"))
-                .andExpect(status().isNoContent());
+        mockMvc.perform(delete("/api/posts/1").header("Authorization", "Bearer " + jwtToken))
+            .andExpect(status().isNoContent());
     }
 
     @Test
@@ -121,7 +148,8 @@ public class PostControllerTest {
         initialPost.setTitle("my Post");
         initialPost.setContent("Sample Content");
 
-        mockMvc.perform(post("/api/posts") 
+        mockMvc.perform(post("/api/posts")
+            .header("Authorization", "Bearer " + jwtToken)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(initialPost)));
 
@@ -130,11 +158,12 @@ public class PostControllerTest {
         updatePostTitle.setTitle("my Post");
         
         mockMvc.perform(patch("/api/posts/1")
+            .header("Authorization", "Bearer " + jwtToken)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(updatePostTitle)))
             .andExpect(status().isAccepted());
 
-        mockMvc.perform(get("/api/posts/1"))
+        mockMvc.perform(get("/api/posts/1").header("Authorization", "Bearer " + jwtToken))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id").exists())
             .andExpect(jsonPath("$.title").value(updatePostTitle.getTitle()))
@@ -145,11 +174,12 @@ public class PostControllerTest {
         updateContentTitle.setContent("updated content");
 
         mockMvc.perform(patch("/api/posts/1")
+            .header("Authorization", "Bearer " + jwtToken)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(updateContentTitle)))
             .andExpect(status().isAccepted());
 
-        mockMvc.perform(get("/api/posts/1"))
+        mockMvc.perform(get("/api/posts/1").header("Authorization", "Bearer " + jwtToken))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id").exists())
             .andExpect(jsonPath("$.title").value(updatePostTitle.getTitle()))
