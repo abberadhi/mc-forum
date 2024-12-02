@@ -1,6 +1,7 @@
 package com.abberadhi.mc_forum.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.abberadhi.mc_forum.dto.PostDTO;
 import com.abberadhi.mc_forum.model.PostEntity;
 import com.abberadhi.mc_forum.service.PostService;
 
@@ -29,7 +31,7 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PostEntity>> getAllPosts(
+    public ResponseEntity<List<PostDTO>> getAllPosts(
         @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber, 
         @RequestParam(value = "title", required = false, defaultValue = "null") String titleSearch, 
         @RequestParam(value = "tag", required = false, defaultValue = "null") String tagSearch) {
@@ -44,13 +46,19 @@ public class PostController {
         pageNumber--;
 
         List<PostEntity> posts = postService.getAllPosts(pageNumber, titleSearch, tagSearch);
-        return new ResponseEntity<>(posts, HttpStatus.OK);
+
+        List<PostDTO> dto = posts.stream()
+                           .map(this::mapToPostDTO)
+                           .collect(Collectors.toList());
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PostEntity> getPostById(@PathVariable Long id) {
+    public ResponseEntity<PostDTO> getPostById(@PathVariable Long id) {
         PostEntity post = postService.getPostById(id);
-        return post != null ? new ResponseEntity<>(post, HttpStatus.OK) :
+        PostDTO dto = mapToPostDTO(post);
+
+        return post != null ? new ResponseEntity<>(dto, HttpStatus.OK) :
                               new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
@@ -61,9 +69,10 @@ public class PostController {
     // }
 
     @PostMapping
-    public ResponseEntity<PostEntity> createPost(@RequestBody PostEntity post) {
+    public ResponseEntity<PostDTO> createPost(@RequestBody PostEntity post) {
         PostEntity createdPost = postService.createPost(post);
-        return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
+        PostDTO dto = mapToPostDTO(createdPost);
+        return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
@@ -80,5 +89,22 @@ public class PostController {
     public ResponseEntity<Void> updatePost(@PathVariable Long id, @RequestBody PostEntity post) {
         postService.updatePost(id, post);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+    public PostDTO mapToPostDTO(PostEntity postEntity) {
+        if (postEntity == null) {
+            return null;
+        }
+
+        PostDTO dto = new PostDTO();
+        dto.setId(postEntity.getId());
+        dto.setTitle(postEntity.getTitle());
+        dto.setContent(postEntity.getContent());
+        dto.setAuthorId(postEntity.getUser().getId());
+        dto.setCreatedAt(postEntity.getCreatedAt());
+        dto.setUpdatedAt(postEntity.getUpdatedAt());
+        dto.setTags(postEntity.getTags());
+
+        return dto;
     }
 }
