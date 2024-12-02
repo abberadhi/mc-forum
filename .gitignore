@@ -45,3 +45,27 @@ generated-test-sources/
 # Any other temporary files
 *.tmp
 *.temp
+
+
+# UI
+src/main/frontend/node_modules
+src/main/frontend/node
+src/main/frontend/.pnp
+src/main/frontend/.pnp.js
+
+# testing
+src/main/frontend/coverage
+
+# production
+src/main/frontend/build
+
+# misc
+src/main/frontend/.DS_Store
+src/main/frontend/.env.local
+src/main/frontend/.env.development.local
+src/main/frontend/.env.test.local
+src/main/frontend/.env.production.local
+
+src/main/frontend/npm-debug.log*
+src/main/frontend/yarn-debug.log*
+src/main/frontend/yarn-error.log*
