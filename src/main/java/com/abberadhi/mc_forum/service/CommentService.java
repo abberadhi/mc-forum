@@ -1,32 +1,31 @@
 package com.abberadhi.mc_forum.service;
 
 import java.util.List;
+import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.abberadhi.mc_forum.model.CommentEntity;
 import com.abberadhi.mc_forum.model.PostEntity;
 import com.abberadhi.mc_forum.model.TagEntity;
+import com.abberadhi.mc_forum.model.UserEntity;
 import com.abberadhi.mc_forum.repository.CommentRepository;
 import com.abberadhi.mc_forum.repository.PostRepository;
 import com.abberadhi.mc_forum.repository.TagRepository;
+import com.abberadhi.mc_forum.repository.UserRepository;
+
+import lombok.AllArgsConstructor;
 
 @Service
+@AllArgsConstructor
 public class CommentService {
 
     private final PostRepository postRepository;
     private final PostService postService;
     private final TagRepository tagRepository;
     private final CommentRepository commentRepository;
-
-    @Autowired
-    public CommentService(PostRepository postRepository, TagRepository tagRepository, CommentRepository commentRepository, PostService postService) {
-        this.postRepository = postRepository;
-        this.tagRepository = tagRepository;
-        this.commentRepository = commentRepository;
-        this.postService = postService;
-    }
+    private final UserRepository userRepository;
 
     public List<TagEntity> getAllTags() {
         return tagRepository.findAll();
@@ -35,6 +34,12 @@ public class CommentService {
     public CommentEntity createComment(PostEntity post, CommentEntity parentComment, CommentEntity comment) {
         comment.setParentCommentEntity(parentComment);
         comment.setPostEntity(post);
+
+        Optional<UserEntity> user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        if (user.isPresent()) {
+            UserEntity u = user.get();
+            comment.setUserEntity(u);
+        }
 
         return commentRepository.save(comment);
     }

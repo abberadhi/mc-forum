@@ -7,6 +7,7 @@ public class CommentDTO {
     private String commentContent;
     private LocalDateTime createdAt;
     private Integer parent_id;
+    private Integer user_id;
     private int upvoteCount;
 
     public int getUpvoteCount() {
@@ -47,6 +48,14 @@ public class CommentDTO {
 
     public void setParent_id(int parent_id) {
         this.parent_id = parent_id;
+    }
+
+    public Integer getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(Integer user_id) {
+        this.user_id = user_id;
     }
 
     

@@ -40,6 +40,10 @@ public class CommentEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private PostEntity postEntity;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", nullable = true)
+    private UserEntity userEntity;
+
     // Reply comment reference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_comment_id", nullable = true)
@@ -114,6 +118,14 @@ public class CommentEntity {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
+
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 }
    
