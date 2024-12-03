@@ -3,3 +3,7 @@
 @tailwind utilities;
 
 /* apply css here */
+
+body {
+    background-color: #dddddd;
+}

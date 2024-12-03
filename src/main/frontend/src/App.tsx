@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import Post from "./components/Post";
+import Threads from "./pages/Threads";
 
 const App = () => {
   return (
@@ -8,12 +9,12 @@ const App = () => {
       <NavBar />
       <Routes>
         <Route path="/posts" element={<Post />} />
-        <Route path="/products" element={<NavBar />} />
+        <Route path="/threads" element={<Threads />} />
         {/* add 404 page */}
-        <Route path="*" element={<Post />} /> 
+        <Route path="*" element={<Post />} />
       </Routes>
     </>
   );
-}
+};
 
 export default App;
