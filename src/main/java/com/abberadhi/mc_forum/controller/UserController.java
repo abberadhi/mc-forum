@@ -3,7 +3,9 @@ package com.abberadhi.mc_forum.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,6 +29,17 @@ public class UserController {
         UserDTO u = mapToUserDTO(user);
         return new ResponseEntity<>(u, HttpStatus.OK);
 
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> updateUser(@PathVariable Integer id, @RequestBody UserEntity user) {
+        try {
+            userService.updatePost(id, user);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
     public UserDTO mapToUserDTO(UserEntity userEntity) {
