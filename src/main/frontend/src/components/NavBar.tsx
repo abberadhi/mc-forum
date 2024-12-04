@@ -1,7 +1,24 @@
-import { Button } from "@headlessui/react";
-import { Link } from "react-router-dom";
+import {
+  Button,
+  Popover,
+  PopoverButton,
+  PopoverPanel,
+} from "@headlessui/react";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthenticationService } from "../services/AuthenticationService";
 
 const NavBar = () => {
+  let navigate = useNavigate();
+  const routeChange = (path: any) => {
+    navigate(path);
+  };
+
+  const logout = () => {
+    AuthenticationService.logout();
+
+    routeChange("/signin");
+  };
+
   return (
     <div>
       <nav className="bg-white border-gray-200 dark:bg-gray-900">
@@ -16,12 +33,62 @@ const NavBar = () => {
             </span>
           </Link>
           <div className="md:block md:w-auto" id="navbar-default">
-            <Button className="border-solid	border-2 mx-4 rounded bg-transparent py-2 px-4 text-sm text-white data-[hover]:bg-sky-1000 data-[active]:bg-sky-700">
-              Sign up
-            </Button>
-            <Button className="rounded bg-sky-600 py-2 px-4 text-sm text-white data-[hover]:bg-sky-500 data-[active]:bg-sky-700">
-              Sign in
-            </Button>
+            {!AuthenticationService.isLoggedIn() ? (
+              <>
+                <Button
+                  onClick={() => routeChange("signup")}
+                  className="border-solid	border-2 mx-4 rounded bg-transparent py-2 px-4 text-sm text-white data-[hover]:bg-sky-1000 data-[active]:bg-sky-700"
+                >
+                  Sign up
+                </Button>
+                <Button
+                  onClick={() => routeChange("signin")}
+                  className="rounded bg-sky-600 py-2 px-4 text-sm text-white data-[hover]:bg-sky-500 data-[active]:bg-sky-700"
+                >
+                  Sign in
+                </Button>
+              </>
+            ) : (
+              <>
+                <div className="flex text-white text-sm">
+                  <Popover>
+                    <PopoverButton className="flex items-center block text-sm/6 font-semibold text-white/50 focus:outline-none data-[active]:text-white data-[hover]:text-white data-[focus]:outline-1 data-[focus]:outline-white">
+                      <div
+                        style={{
+                          borderRadius: "50%",
+                          width: 25,
+                          height: 25,
+                          background: "red",
+                          display: "block",
+                        }}
+                        className="px-2 w-1/2 h-10 rounded-full bg-black flex-none"
+                      ></div>
+                      <span className="px-2">User Id</span>
+                    </PopoverButton>
+                    <PopoverPanel
+                      transition
+                      anchor="bottom"
+                      className="divide-y bg-gray-900 rounded-xl bg-black/5 text-sm/6 transition duration-200 ease-in-out [--anchor-gap:var(--spacing-5)] data-[closed]:-translate-y-1 data-[closed]:opacity-0"
+                    >
+                      <div className="p-3">
+                        <button
+                          className="block rounded-lg py-2 px-3 transition hover:bg-white/5"
+                          // onClick={logout}
+                        >
+                          <p className="font-semibold text-white">Profile</p>
+                        </button>
+                        <button
+                          className="block rounded-lg py-2 px-3 transition hover:bg-white/5"
+                          onClick={logout}
+                        >
+                          <p className="font-semibold text-white">Log out</p>
+                        </button>
+                      </div>
+                    </PopoverPanel>
+                  </Popover>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </nav>

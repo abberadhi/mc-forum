@@ -1,9 +1,14 @@
-const Threads = () => {
+import { Navigate } from "react-router-dom";
+import SignUpForm from "../components/SignUpForm";
+
+const SignUp = () => {
   return (
     <>
-      <main>Sign in page</main>
+      <main>
+        <SignUpForm />
+      </main>
     </>
   );
 };
 
-export default Threads;
+export default SignUp;

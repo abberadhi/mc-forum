@@ -3,35 +3,12 @@ import Post from "../components/Post";
 import SearchBar from "../components/SearchBar";
 import { AuthenticationService } from "../services/AuthenticationService";
 import api from "../services/api";
+import { Navigate } from "react-router-dom";
 
 const Threads = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<String | null>(null);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error2, setError2] = useState<String | null>(null);
-
-  useEffect(() => {
-    const handleLogin = async () => {
-      // e.preventDefault();
-      setError(null);
-
-      try {
-        setUsername("motorcyclist2");
-        setPassword("pass");
-        const response = await AuthenticationService.login({
-          username,
-          password,
-        });
-        console.log("User Data:", response);
-      } catch (err) {
-        setError2("An error occurred");
-      }
-    };
-
-    handleLogin();
-  }, []);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -49,6 +26,10 @@ const Threads = () => {
     fetchPosts();
   }, []);
 
+  if (!AuthenticationService.isLoggedIn()) {
+    return <Navigate to="/signup" replace />;
+  }
+
   return (
     <>
       <main>
@@ -64,7 +45,7 @@ const Threads = () => {
               posts.map((post: any) => <Post key={post.id} post={post} />)
             )}
           </div>
-          <div className="flex-initial w-64">side</div>
+          {/* <div className="flex-initial w-64">side</div> */}
         </div>
       </main>
     </>
