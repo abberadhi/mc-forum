@@ -2,17 +2,24 @@ package com.abberadhi.mc_forum.model;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.abberadhi.mc_forum.controller.BikeModelController;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -42,13 +49,10 @@ public class UserEntity implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    // // Constructor with all fields (except ID since it is auto-generated)
-    // public Users (String username, String description, LocalDateTime dateJoined, String password) {
-    //     this.username = username;
-    //     this.description = description;
-    //     this.dateJoined = dateJoined;
-    //     this.password = password;
-    // }
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "bike_id", nullable = true)
+    private BikeModelEntity bikeModelEntity;
+
     @PrePersist
     protected void onCreate() {
         this.dateJoined = LocalDateTime.now();
@@ -114,5 +118,13 @@ public class UserEntity implements UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public BikeModelEntity getBikeModelEntity() {
+        return bikeModelEntity;
+    }
+
+    public void setBikeModelEntity(BikeModelEntity bikeModelEntity) {
+        this.bikeModelEntity = bikeModelEntity;
     }
 }

@@ -14,6 +14,10 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    public UserEntity getUserById(Integer id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
     public void createUser(UserDetails newUser) {
         UserEntity user = new UserEntity();
         user.setPassword(newUser.getPassword());
