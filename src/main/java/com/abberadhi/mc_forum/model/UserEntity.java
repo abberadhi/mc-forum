@@ -29,7 +29,7 @@ public class UserEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
- 
+
     @Column(nullable = false, unique = true)
     private String username;
 
@@ -39,7 +39,7 @@ public class UserEntity implements UserDetails {
     @Column(name = "date_joined", nullable = false)
     private LocalDateTime dateJoined;
 
-    @Column (nullable = false)
+    @Column(nullable = false)
     private String password;
 
     // // Constructor with all fields (except ID since it is auto-generated)
@@ -49,7 +49,6 @@ public class UserEntity implements UserDetails {
     //     this.dateJoined = dateJoined;
     //     this.password = password;
     // }
-
     @PrePersist
     protected void onCreate() {
         this.dateJoined = LocalDateTime.now();
