@@ -28,7 +28,13 @@ public class UserController {
         UserEntity user = userService.getUserById(id);
         UserDTO u = mapToUserDTO(user);
         return new ResponseEntity<>(u, HttpStatus.OK);
+    }
 
+    @GetMapping("/details/{username}")
+    public ResponseEntity<UserDTO> getUserDetails(@PathVariable String username) {
+        UserEntity user = userService.getUserByUsername(username);
+        UserDTO u = mapToUserDTO(user);
+        return new ResponseEntity<>(u, HttpStatus.OK);
     }
 
     @PatchMapping("/{id}")
