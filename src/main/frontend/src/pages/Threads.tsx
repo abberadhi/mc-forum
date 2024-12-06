@@ -27,7 +27,7 @@ const Threads = () => {
   }, []);
 
   if (!AuthenticationService.isLoggedIn()) {
-    return <Navigate to="/signup" replace />;
+    return <Navigate to="/signin" replace />;
   }
 
   return (

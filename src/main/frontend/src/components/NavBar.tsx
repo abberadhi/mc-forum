@@ -19,6 +19,10 @@ const NavBar = () => {
     routeChange("/signin");
   };
 
+  const redirectEditDetails = () => {
+    routeChange("/user/update");
+  };
+
   return (
     <div>
       <nav className="bg-white border-gray-200 dark:bg-gray-900">
@@ -76,6 +80,14 @@ const NavBar = () => {
                           // onClick={logout}
                         >
                           <p className="font-semibold text-white">Profile</p>
+                        </button>
+                        <button
+                          className="block rounded-lg py-2 px-3 transition hover:bg-white/5"
+                          onClick={redirectEditDetails}
+                        >
+                          <p className="font-semibold text-white">
+                            Edit details
+                          </p>
                         </button>
                         <button
                           className="block rounded-lg py-2 px-3 transition hover:bg-white/5"

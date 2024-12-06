@@ -1,10 +1,13 @@
 import api from "./api";
 import { jwtDecode } from "jwt-decode";
+import { UserService } from "./UserService";
+import { UserDataModel } from "../models/UserDataModel";
 
 export const AuthenticationService = {
   login,
   register,
   getToken,
+  getUserData,
   isLoggedIn,
   logout,
 };
@@ -16,8 +19,12 @@ async function login(credentials: any) {
   try {
     const response = await api.post("/auth/authenticate", credentials);
     const { token } = response.data;
-
     localStorage.setItem("jwtToken", token);
+    let userData = JSON.stringify(
+      await UserService.getUserDataByUsername(getUsernameFromToken(token))
+    );
+
+    localStorage.setItem("userData", userData);
 
     return response.data;
   } catch (error: any) {
@@ -35,6 +42,12 @@ async function register(credentials: any) {
 
     localStorage.setItem("jwtToken", token);
 
+    let userData = JSON.stringify(
+      await UserService.getUserDataByUsername(getUsernameFromToken(token))
+    );
+
+    localStorage.setItem("userData", userData);
+
     return response.data;
   } catch (error: any) {
     throw error.response?.data || new Error("Register failed");
@@ -50,6 +63,7 @@ function isLoggedIn(): boolean {
   }
   let decodedToken: any = jwtDecode(token);
   let currentDate = new Date();
+
   // token expired
   if (decodedToken.exp * 1000 < currentDate.getTime()) {
     return false;
@@ -58,10 +72,20 @@ function isLoggedIn(): boolean {
   return true;
 }
 
+function getUsernameFromToken(token: any) {
+  let decodedToken: any = jwtDecode(token);
+  return decodedToken.sub;
+}
+
 function getToken() {
   return localStorage.getItem("jwtToken");
 }
 
+function getUserData(): UserDataModel {
+  return JSON.parse(localStorage.getItem("userData") ?? "");
+}
+
 function logout() {
   localStorage.removeItem("jwtToken");
+  localStorage.removeItem("userData");
 }

@@ -10,7 +10,7 @@ const SignUpForm = () => {
 
   let navigate: any = useNavigate();
   const routeChange = () => {
-    let path = `/threads`;
+    let path = `/user/update`;
     navigate(path);
   };
 
