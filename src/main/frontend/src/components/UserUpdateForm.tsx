@@ -143,6 +143,11 @@ const UserUpdateForm = () => {
                       "*:text-black"
                     )}
                   >
+                    {bikeModel ? (
+                      <option selected={true}>{bikeModel.brand}</option>
+                    ) : (
+                      <></>
+                    )}
                     <option value="none">none</option>
                     {allBikeBrands?.map((element) => {
                       return (
@@ -170,6 +175,11 @@ const UserUpdateForm = () => {
                       "data-[disabled]:bg-gray-100"
                     )}
                   >
+                    {bikeModel ? (
+                      <option selected={true}>{bikeModel.model}</option>
+                    ) : (
+                      <></>
+                    )}
                     <option value="none">none</option>
                     {allBikeModels?.map((element: any) => {
                       return (
