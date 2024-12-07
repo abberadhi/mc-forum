@@ -10,16 +10,13 @@ const Post = ({ post }: any) => {
         <div className="flex px-6 pt-4">
           <div></div>
           <div className="flex items-center">
-            <div
-              style={{
-                borderRadius: "50%",
-                width: 45,
-                height: 45,
-                background: "red",
-                display: "block",
-              }}
-              className="w-1/2 h-10 rounded-full bg-black flex-none"
-            ></div>
+            <img
+              src="/profile-avatar.png"
+              alt={`avatar`}
+              width={45}
+              height={45}
+              className="rounded-full border-4 border-white shadow-lg"
+            />
             <div className="px-2">id: {post.authorId}</div>
             <div className="px-2 text-gray text-xs">1 hour ago</div>
           </div>

@@ -33,23 +33,23 @@ public class JwtService {
     }
 
     public String generateToken(
-        UserDetails userDetails
+            UserDetails userDetails
     ) {
         return generateToken(new HashMap<>(), userDetails);
     }
 
     public String generateToken(
-        Map<String, Object> extraClaims,
-        UserDetails userDetails
+            Map<String, Object> extraClaims,
+            UserDetails userDetails
     ) {
         return Jwts
-            .builder()
-            .setClaims(extraClaims)
-            .setSubject(userDetails.getUsername())
-            .setIssuedAt(new Date(System.currentTimeMillis()))
-            .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_DATE_MILLIS))
-            .signWith(getSignInKey(), SignatureAlgorithm.HS256)
-            .compact();
+                .builder()
+                .setClaims(extraClaims)
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_DATE_MILLIS))
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+                .compact();
     }
 
     public boolean isTokenValid(String token, UserEntity userDetails) {
@@ -63,11 +63,11 @@ public class JwtService {
 
     private Claims extractAllClaims(String token) {
         return Jwts
-            .parserBuilder()
-            .setSigningKey(getSignInKey())
-            .build()
-            .parseClaimsJws(token)
-            .getBody();
+                .parserBuilder()
+                .setSigningKey(getSignInKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 
     private Date extractExpiration(String token) {

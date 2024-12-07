@@ -87,6 +87,7 @@ const UserUpdateForm = () => {
     UserService.getUserDataById(userId).then((data) => {
       setUserData(data);
       setDescription(data.description);
+      if (!data.bike) return;
       setBikeModel(data.bike);
       setBikeBrand(data.bike.brand);
     });

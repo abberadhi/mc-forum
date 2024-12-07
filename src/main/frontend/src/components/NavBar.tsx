@@ -23,6 +23,12 @@ const NavBar = () => {
     routeChange("/user/update");
   };
 
+  const redirectUserProfile = () => {
+    const userId = AuthenticationService.getUserData().id;
+
+    routeChange(`/user/profile/${userId}`);
+  };
+
   return (
     <div>
       <nav className="bg-white border-gray-200 dark:bg-gray-900">
@@ -31,7 +37,7 @@ const NavBar = () => {
             to="/threads"
             className="flex items-center space-x-3 rtl:space-x-reverse"
           >
-            <img src="/logo.png" className="h-8" alt="Flowbite Logo" />
+            <img src="/logo.png" className="h-8" alt="username logo" />
             <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
               BikerHub
             </span>
@@ -57,17 +63,16 @@ const NavBar = () => {
                 <div className="flex text-white text-sm">
                   <Popover>
                     <PopoverButton className="flex items-center block text-sm/6 font-semibold text-white/50 focus:outline-none data-[active]:text-white data-[hover]:text-white data-[focus]:outline-1 data-[focus]:outline-white">
-                      <div
-                        style={{
-                          borderRadius: "50%",
-                          width: 25,
-                          height: 25,
-                          background: "red",
-                          display: "block",
-                        }}
-                        className="px-2 w-1/2 h-10 rounded-full bg-black flex-none"
-                      ></div>
-                      <span className="px-2">User Id</span>
+                      <img
+                        src="/profile-avatar.png"
+                        alt={`avatar`}
+                        width={30}
+                        height={30}
+                        className="rounded-full border-4 border-white shadow-lg"
+                      />
+                      <span className="px-2">
+                        {AuthenticationService.getUserData().username}
+                      </span>
                     </PopoverButton>
                     <PopoverPanel
                       transition
@@ -77,7 +82,7 @@ const NavBar = () => {
                       <div className="p-3">
                         <button
                           className="block rounded-lg py-2 px-3 transition hover:bg-white/5"
-                          // onClick={logout}
+                          onClick={redirectUserProfile}
                         >
                           <p className="font-semibold text-white">Profile</p>
                         </button>
