@@ -31,10 +31,10 @@ public class PostService {
     private final UserRepository userRepository;
     private final int PAGESIZE = 10;
 
-
-    public List<PostEntity> getAllPosts(int pageNumber, String postTitle, String tagName) {
+    public List<PostEntity> getAllPosts(int pageNumber, String postTitle, String tagName, String userName) {
+        Optional<UserEntity> user = userRepository.findByUsername(userName);
         Pageable page = PageRequest.of(pageNumber, PAGESIZE, Sort.by("title")); // TODO: sort by date
-        Page<PostEntity> result =  postRepository.findAllWithFilters(postTitle, tagName, page);
+        Page<PostEntity> result = postRepository.findAllWithFilters(postTitle, tagName, user.orElse(null), page);
         // System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
 
         return result.toList();
@@ -47,7 +47,6 @@ public class PostService {
     // public List<PostEntity> getPostsByUserId(Long userId) {
     //     return postRepository.findByUserId(userId);
     // }
-
     public PostEntity createPost(PostEntity post) {
         // System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
         Optional<UserEntity> user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
@@ -67,7 +66,6 @@ public class PostService {
             post.setUser(u);
         }
 
-
         post.setTags(tags);
 
         return postRepository.save(post);
@@ -81,7 +79,6 @@ public class PostService {
         PostEntity post = postRepository.findById(id).orElseThrow(() -> new RuntimeException("Post not found")); // fix handling
 
         // Update the fields
-        
         if (updatedPost.getTitle() != null) {
             post.setTitle(updatedPost.getTitle());
         }

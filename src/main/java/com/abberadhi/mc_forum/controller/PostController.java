@@ -33,7 +33,8 @@ public class PostController {
     public ResponseEntity<List<PostDTO>> getAllPosts(
             @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
             @RequestParam(value = "title", required = false, defaultValue = "null") String titleSearch,
-            @RequestParam(value = "tag", required = false, defaultValue = "null") String tagSearch) {
+            @RequestParam(value = "tag", required = false, defaultValue = "null") String tagSearch,
+            @RequestParam(value = "username", required = false, defaultValue = "null") String userName) {
 
         if ("null".equals(titleSearch)) {
             titleSearch = null;
@@ -44,7 +45,7 @@ public class PostController {
 
         pageNumber--;
 
-        List<PostEntity> posts = postService.getAllPosts(pageNumber, titleSearch, tagSearch);
+        List<PostEntity> posts = postService.getAllPosts(pageNumber, titleSearch, tagSearch, userName);
 
         List<PostDTO> dto = posts.stream()
                 .map(this::mapToPostDTO)
