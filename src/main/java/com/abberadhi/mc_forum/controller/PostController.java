@@ -19,7 +19,6 @@ import com.abberadhi.mc_forum.dto.PostDTO;
 import com.abberadhi.mc_forum.model.PostEntity;
 import com.abberadhi.mc_forum.service.PostService;
 
-
 @RestController
 @RequestMapping("/api/posts")
 public class PostController {
@@ -32,9 +31,9 @@ public class PostController {
 
     @GetMapping
     public ResponseEntity<List<PostDTO>> getAllPosts(
-        @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber, 
-        @RequestParam(value = "title", required = false, defaultValue = "null") String titleSearch, 
-        @RequestParam(value = "tag", required = false, defaultValue = "null") String tagSearch) {
+            @RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+            @RequestParam(value = "title", required = false, defaultValue = "null") String titleSearch,
+            @RequestParam(value = "tag", required = false, defaultValue = "null") String tagSearch) {
 
         if ("null".equals(titleSearch)) {
             titleSearch = null;
@@ -42,14 +41,14 @@ public class PostController {
         if ("null".equals(tagSearch)) {
             tagSearch = null;
         }
-        
+
         pageNumber--;
 
         List<PostEntity> posts = postService.getAllPosts(pageNumber, titleSearch, tagSearch);
 
         List<PostDTO> dto = posts.stream()
-                           .map(this::mapToPostDTO)
-                           .collect(Collectors.toList());
+                .map(this::mapToPostDTO)
+                .collect(Collectors.toList());
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
@@ -58,8 +57,8 @@ public class PostController {
         PostEntity post = postService.getPostById(id);
         PostDTO dto = mapToPostDTO(post);
 
-        return post != null ? new ResponseEntity<>(dto, HttpStatus.OK) :
-                              new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return post != null ? new ResponseEntity<>(dto, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     // @GetMapping("/user/{userId}")
@@ -67,7 +66,6 @@ public class PostController {
     //     List<PostEntity> posts = postService.getPostsByUserId(userId);
     //     return new ResponseEntity<>(posts, HttpStatus.OK);
     // }
-
     @PostMapping
     public ResponseEntity<PostDTO> createPost(@RequestBody PostEntity post) {
         PostEntity createdPost = postService.createPost(post);
@@ -101,6 +99,7 @@ public class PostController {
         dto.setTitle(postEntity.getTitle());
         dto.setContent(postEntity.getContent());
         dto.setAuthorId(postEntity.getUser().getId());
+        dto.setAuthorUserName(postEntity.getUser().getUsername());
         dto.setCreatedAt(postEntity.getCreatedAt());
         dto.setUpdatedAt(postEntity.getUpdatedAt());
         dto.setTags(postEntity.getTags());

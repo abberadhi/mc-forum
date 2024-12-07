@@ -11,6 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PostDTO {
+
     private Long id;
     private String title;
     private String content;
@@ -18,4 +19,5 @@ public class PostDTO {
     private LocalDateTime updatedAt;
     private Set<TagEntity> tags;
     private Integer authorId;
+    private String authorUserName;
 }
