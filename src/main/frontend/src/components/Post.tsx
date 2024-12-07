@@ -2,6 +2,7 @@ import {
   ChatBubbleBottomCenterIcon,
   HandThumbUpIcon,
 } from "@heroicons/react/24/solid";
+import { dateFormatter } from "../utils/dateFormatter";
 
 const Post = ({ post }: any) => {
   return (
@@ -13,12 +14,14 @@ const Post = ({ post }: any) => {
             <img
               src="/profile-avatar.png"
               alt={`avatar`}
-              width={45}
-              height={45}
+              width={35}
+              height={35}
               className="rounded-full border-4 border-white shadow-lg"
             />
-            <div className="px-2">id: {post.authorId}</div>
-            <div className="px-2 text-gray text-xs">1 hour ago</div>
+            <div className="px-2">{post.authorUserName}</div>
+            <div className="px-2 text-gray text-xs">
+              {dateFormatter.dateDistance(post.createdAt)}
+            </div>
           </div>
         </div>
         <div className="px-6 py-4">
