@@ -26,7 +26,9 @@ const NavBar = () => {
   const redirectUserProfile = () => {
     const userId = AuthenticationService.getUserData().id;
 
-    routeChange(`/user/profile/${userId}`);
+    routeChange(
+      `/user/profile/${AuthenticationService.getUserData().username}`
+    );
   };
 
   return (

@@ -22,7 +22,8 @@ const UserProfile = () => {
   }, []);
 
   useEffect(() => {
-    UserService.getUserDataById(params.id)
+    if (!params.username) return;
+    UserService.getUserDataByUsername(params.username)
       .then((user) => {
         setUser(user);
         setLoading(false);

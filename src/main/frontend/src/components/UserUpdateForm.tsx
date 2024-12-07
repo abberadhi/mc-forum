@@ -26,7 +26,7 @@ const UserUpdateForm = () => {
 
   let navigate: any = useNavigate();
   const routeChange = () => {
-    let path = `/threads`;
+    let path = `/user/profile/${AuthenticationService.getUserData().username}`;
     navigate(path);
   };
 

@@ -16,7 +16,7 @@ const App = () => {
         <Route path="/threads" element={<Threads />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
-        <Route path="/user/profile/:id" element={<UserProfile />} />
+        <Route path="/user/profile/:username" element={<UserProfile />} />
         <Route path="/user/update/" element={<UserUpdate />} />
         <Route path="/404" element={<NotFound />} />
         {/* add 404 page */}
