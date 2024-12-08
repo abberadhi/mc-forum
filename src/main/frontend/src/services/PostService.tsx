@@ -5,9 +5,20 @@ export const PostService = {
   getBikeModels,
 };
 
-async function getPosts() {
+async function getPosts(
+  username: string,
+  title: string,
+  tag: string,
+  pageNumber: number
+) {
   try {
-    const response = await api.get("/posts");
+    const response = await api.get(
+      `/posts?${username ? `username=${username}&` : ""}${
+        title ? `title=${title}&` : ""
+      }${tag ? `tag=${tag}&` : ""}${
+        pageNumber ? `pageNumber=${pageNumber}&` : ""
+      }`
+    );
     const data = response.data;
 
     return data;

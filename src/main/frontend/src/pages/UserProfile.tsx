@@ -15,10 +15,12 @@ const UserProfile = () => {
   const [posts, setPosts] = useState<[]>([]);
   const [user, setUser] = useState<UserDataModel | null>();
 
-  const params = useParams();
+  const params: any = useParams();
 
   useEffect(() => {
-    PostService.getPosts().then((posts) => setPosts(posts));
+    PostService.getPosts(params.username, "", "", 1).then((posts) =>
+      setPosts(posts)
+    );
   }, []);
 
   useEffect(() => {
