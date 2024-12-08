@@ -2,7 +2,7 @@ import api from "./api";
 
 export const PostService = {
   getPosts,
-  getBikeModels,
+  createPost,
 };
 
 async function getPosts(
@@ -29,13 +29,18 @@ async function getPosts(
   }
 }
 
-async function getBikeModels(brand: String) {
+async function createPost(title: string, content: string, tags: string[]) {
   try {
-    const response = await api.get(`/bikes/models/${brand}`);
+    // Build query parameters dynamically
+    const response = await api.post(`/posts`, {
+      title,
+      content,
+      tags,
+    });
     const data = response.data;
 
     return data;
   } catch (error: any) {
-    throw error.response?.data || new Error("Register failed");
+    throw error.response?.data || new Error("Creating posts failed");
   }
 }

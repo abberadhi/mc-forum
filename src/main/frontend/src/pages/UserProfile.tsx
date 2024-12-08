@@ -28,7 +28,12 @@ const UserProfile = () => {
 
     const tag = searchTerm.startsWith("#") ? searchTerm.substring(1) : "";
 
-    PostService.getPosts("", !tag ? searchTerm : "", tag, 1)
+    PostService.getPosts(
+      AuthenticationService.getUserData().username,
+      !tag ? searchTerm : "",
+      tag,
+      1
+    )
       .then((posts) => {
         setPosts(posts);
         setLoading(false);

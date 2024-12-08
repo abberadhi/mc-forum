@@ -1,10 +1,17 @@
 import { Button } from "@headlessui/react";
 import { MagnifyingGlassIcon, PlusIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SearchBar = ({ onSearchChanged }: any) => {
   const searchChanged = (e: any) => {
     onSearchChanged(e.target.value);
+  };
+
+  let navigate: any = useNavigate();
+  const routeChange = () => {
+    let path = `/post/new`;
+    navigate(path);
   };
 
   return (
@@ -24,7 +31,10 @@ const SearchBar = ({ onSearchChanged }: any) => {
           />
         </div>
 
-        <Button className="flex border-solid	border-2 rounded bg-transparent py-2 px-4 text-sm text-black data-[hover]:bg-sky-1000 data-[active]:bg-sky-700">
+        <Button
+          onClick={routeChange}
+          className="flex border-solid	border-2 rounded bg-transparent py-2 px-4 text-sm text-black data-[hover]:bg-sky-1000 data-[active]:bg-sky-700"
+        >
           <PlusIcon className="h-5 w-5"></PlusIcon>
           <span>Create Post</span>
         </Button>

@@ -7,6 +7,7 @@ import SignIn from "./pages/SignIn";
 import UserUpdate from "./pages/UserUpdate";
 import UserProfile from "./pages/UserProfile";
 import NotFound from "./pages/NotFound";
+import NewPost from "./pages/NewPost";
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
         <Route path="/threads" element={<Threads />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
+        <Route path="/post/new" element={<NewPost />} />
         <Route path="/user/profile/:username" element={<UserProfile />} />
         <Route path="/user/update/" element={<UserUpdate />} />
         <Route path="/404" element={<NotFound />} />
