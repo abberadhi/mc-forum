@@ -8,6 +8,7 @@ import { PostService } from "../services/PostService";
 import { UserService } from "../services/UserService";
 import { UserDataModel } from "../models/UserDataModel";
 import NotFound from "./NotFound";
+import NoPosts from "../components/NoPosts";
 
 const UserProfile = () => {
   const [error, setError] = useState("");
@@ -21,7 +22,7 @@ const UserProfile = () => {
     PostService.getPosts(params.username, "", "", 1).then((posts) =>
       setPosts(posts)
     );
-  }, []);
+  }, [params.username]);
 
   useEffect(() => {
     if (!params.username) return;
@@ -33,7 +34,7 @@ const UserProfile = () => {
       .catch(() => {
         return <Navigate to="/404" replace />;
       });
-  }, []);
+  }, [params.username]);
 
   if (!AuthenticationService.isLoggedIn()) {
     return <Navigate to="/signin" replace />;
@@ -52,10 +53,10 @@ const UserProfile = () => {
         <div className="flex-1 w-64">
           <SearchBar />
 
-          {posts ? (
+          {posts.length > 0 ? (
             posts?.map((post: any) => <Post key={post.id} post={post} />)
           ) : (
-            <></>
+            <NoPosts />
           )}
         </div>
       </main>
