@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.abberadhi.mc_forum.dto.PostDTO;
 import com.abberadhi.mc_forum.model.PostEntity;
+import com.abberadhi.mc_forum.service.CommentService;
 import com.abberadhi.mc_forum.service.PostService;
 
 @RestController
@@ -24,9 +25,11 @@ import com.abberadhi.mc_forum.service.PostService;
 public class PostController {
 
     private final PostService postService;
+    private final CommentService commentService;
 
-    public PostController(PostService postService) {
+    public PostController(PostService postService, CommentService commentService) {
         this.postService = postService;
+        this.commentService = commentService;
     }
 
     @GetMapping
@@ -104,6 +107,7 @@ public class PostController {
         dto.setCreatedAt(postEntity.getCreatedAt());
         dto.setUpdatedAt(postEntity.getUpdatedAt());
         dto.setTags(postEntity.getTags());
+        dto.setCommentCount(commentService.getCommentCountByPost(postEntity));
 
         return dto;
     }

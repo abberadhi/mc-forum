@@ -20,4 +20,5 @@ public class PostDTO {
     private Set<TagEntity> tags;
     private Integer authorId;
     private String authorUserName;
+    private int commentCount;
 }

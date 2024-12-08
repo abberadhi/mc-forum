@@ -53,8 +53,11 @@ public class CommentService {
         return commentRepository.findById(id).orElse(null);
     }
 
+    public int getCommentCountByPost(PostEntity postEntity) {
+        return commentRepository.findCountByPostEntity(postEntity);
+    }
+
     public void deleteCommentById(Long id) {
         commentRepository.deleteById(id);
     }
 }
-
