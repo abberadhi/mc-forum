@@ -15,14 +15,26 @@ const UserProfile = () => {
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState<[]>([]);
   const [user, setUser] = useState<UserDataModel | null>();
+  const [searchTerm, setSearchTerm] = useState<string>("");
+
+  const onSearchChanged = (data: string) => {
+    setSearchTerm(data);
+  };
 
   const params: any = useParams();
 
   useEffect(() => {
-    PostService.getPosts(params.username, "", "", 1).then((posts) =>
-      setPosts(posts)
-    );
-  }, [params.username]);
+    setLoading(true);
+
+    const tag = searchTerm.startsWith("#") ? searchTerm.substring(1) : "";
+
+    PostService.getPosts("", !tag ? searchTerm : "", tag, 1)
+      .then((posts) => {
+        setPosts(posts);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false)); // Handle errors to prevent infinite loading
+  }, [params.username, searchTerm]);
 
   useEffect(() => {
     if (!params.username) return;
@@ -51,7 +63,7 @@ const UserProfile = () => {
           <UserProfileCard profile={user}></UserProfileCard>
         </div>
         <div className="flex-1 w-64">
-          <SearchBar />
+          <SearchBar onSearchChanged={onSearchChanged} />
 
           {posts.length > 0 ? (
             posts?.map((post: any) => <Post key={post.id} post={post} />)

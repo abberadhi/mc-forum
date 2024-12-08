@@ -12,18 +12,20 @@ async function getPosts(
   pageNumber: number
 ) {
   try {
-    const response = await api.get(
-      `/posts?${username ? `username=${username}&` : ""}${
-        title ? `title=${title}&` : ""
-      }${tag ? `tag=${tag}&` : ""}${
-        pageNumber ? `pageNumber=${pageNumber}&` : ""
-      }`
-    );
+    // Build query parameters dynamically
+    const queryParams = new URLSearchParams();
+
+    if (username) queryParams.append("username", username);
+    if (title) queryParams.append("title", title);
+    if (tag) queryParams.append("tag", tag);
+    if (pageNumber) queryParams.append("pageNumber", pageNumber.toString());
+
+    const response = await api.get(`/posts?${queryParams.toString()}`);
     const data = response.data;
 
     return data;
   } catch (error: any) {
-    throw error.response?.data || new Error("Register failed");
+    throw error.response?.data || new Error("Fetching posts failed");
   }
 }
 

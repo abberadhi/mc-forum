@@ -4,27 +4,31 @@ import SearchBar from "../components/SearchBar";
 import { AuthenticationService } from "../services/AuthenticationService";
 import api from "../services/api";
 import { Navigate } from "react-router-dom";
+import { PostService } from "../services/PostService";
 
 const Threads = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<String | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+
+  const onSearchChanged = (data: string) => {
+    setSearchTerm(data);
+    console.log(data);
+  };
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        setLoading(true);
-        const response = await api.get("/posts");
-        setPosts(response.data);
-      } catch (err) {
-        setError("Failed to fetch posts. Please try again later.");
-      } finally {
-        setLoading(false);
-      }
-    };
+    setLoading(true);
 
-    fetchPosts();
-  }, []);
+    const tag = searchTerm.startsWith("#") ? searchTerm.substring(1) : "";
+
+    PostService.getPosts("", !tag ? searchTerm : "", tag, 1)
+      .then((posts) => {
+        setPosts(posts);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false)); // Handle errors to prevent infinite loading
+  }, [searchTerm]);
 
   if (!AuthenticationService.isLoggedIn()) {
     return <Navigate to="/signin" replace />;
@@ -35,7 +39,7 @@ const Threads = () => {
       <main>
         <div className="flex">
           <div className="flex-1 w-64">
-            <SearchBar />
+            <SearchBar onSearchChanged={onSearchChanged} />
 
             {loading ? (
               <p>Loading posts...</p>
