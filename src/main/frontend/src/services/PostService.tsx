@@ -3,6 +3,7 @@ import api from "./api";
 export const PostService = {
   getPosts,
   createPost,
+  getPostById,
 };
 
 async function getPosts(
@@ -21,6 +22,17 @@ async function getPosts(
     if (pageNumber) queryParams.append("pageNumber", pageNumber.toString());
 
     const response = await api.get(`/posts?${queryParams.toString()}`);
+    const data = response.data;
+
+    return data;
+  } catch (error: any) {
+    throw error.response?.data || new Error("Fetching posts failed");
+  }
+}
+
+async function getPostById(id: number) {
+  try {
+    const response = await api.get(`/posts/${id}`);
     const data = response.data;
 
     return data;

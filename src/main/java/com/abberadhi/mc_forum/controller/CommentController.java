@@ -19,8 +19,6 @@ import com.abberadhi.mc_forum.model.PostEntity;
 import com.abberadhi.mc_forum.service.CommentService;
 import com.abberadhi.mc_forum.service.PostService;
 
-
-
 @RestController
 @RequestMapping("/api/comments")
 public class CommentController {
@@ -42,8 +40,8 @@ public class CommentController {
 
         List<CommentEntity> postComments = commentService.getCommentsByPostId(postId);
         List<CommentDTO> commentDTO = postComments.stream()
-                           .map(this::mapToCommentDTO)
-                           .collect(Collectors.toList());
+                .map(this::mapToCommentDTO)
+                .collect(Collectors.toList());
 
         return new ResponseEntity<>(commentDTO, HttpStatus.OK);
     }
@@ -102,7 +100,7 @@ public class CommentController {
         dto.setUpvoteCount(commentEntity.getUpvoteCount());
         dto.setUser_id(commentEntity.getUserEntity().getId());
         if (commentEntity.getParentCommentEntity() != null) {
-            dto.setParent_id(commentEntity.getParentCommentEntity().getId()); 
+            dto.setParent_id(commentEntity.getParentCommentEntity().getId());
         }
         return dto;
     }

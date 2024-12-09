@@ -10,7 +10,6 @@ const Post = ({ post }: any) => {
     <div className="mx-4 p-4 flex flex-row justify-center items-center">
       <div className="w-full bg-white max-w-full rounded overflow-hidden shadow-lg">
         <div className="flex px-6 pt-4">
-          <div></div>
           <Link to={`/user/profile/${post.authorUserName}`}>
             <div className="flex items-center">
               <img
@@ -49,12 +48,14 @@ const Post = ({ post }: any) => {
               <p className="px-1 text-white">1</p>
             </div>
           </span>
-          <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-            <div className="flex items-center	">
-              <ChatBubbleBottomCenterIcon className="size-6 text-white" />
-              <p className="px-1 text-white">1</p>
-            </div>
-          </span>
+          <Link to={`/post/${post.id}`}>
+            <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+              <div className="flex items-center	">
+                <ChatBubbleBottomCenterIcon className="size-6 text-white" />
+                <p className="px-1 text-white">{post.commentCount}</p>
+              </div>
+            </span>
+          </Link>
         </div>
       </div>
     </div>
