@@ -1,9 +1,6 @@
 export interface CommentModel {
   id: string;
-  user: {
-    name: string;
-    avatar: string;
-  };
+  user: string;
   content: string;
   date: string;
   replies?: CommentModel[];

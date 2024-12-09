@@ -16,7 +16,6 @@ const SignInForm = () => {
 
   const handleLogin = (e: any) => {
     e.preventDefault();
-    console.log(username, password);
 
     AuthenticationService.login({ username, password })
       .then(() => {

@@ -43,7 +43,7 @@ function commentDTO(comments: any) {
   comments.forEach((comment: any) => {
     map.set(comment.id, {
       id: comment.id.toString(),
-      user: comment.user_id || { name: "Unknown", avatar: "" },
+      user: comment.username,
       content: comment.commentContent,
       date: new Date(comment.createdAt).toISOString(),
       replies: [],

@@ -14,7 +14,6 @@ const Threads = () => {
 
   const onSearchChanged = (data: string) => {
     setSearchTerm(data);
-    console.log(data);
   };
 
   useEffect(() => {

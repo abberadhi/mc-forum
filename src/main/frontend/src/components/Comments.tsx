@@ -27,21 +27,17 @@ const Comments: React.FC<{ comment: CommentModel; level?: number }> = ({
     );
   };
 
-  console.log(comment);
-
   return (
     <div className={`mb-4 ${level > 0 ? "ml-8" : ""}`}>
       <div className="flex items-start space-x-3">
         <img
           src="/profile-avatar.png"
-          alt={comment.user.name}
+          alt={comment.user}
           className="w-10 h-10 rounded-full"
         />
         <div className="flex-1">
           <div className="flex items-center mb-1">
-            <span className="font-semibold mr-2">
-              {comment.user.name}username
-            </span>
+            <span className="font-semibold mr-2">{comment.user}</span>
             <span className="text-gray-500 text-sm">{comment.date}</span>
           </div>
           <p className="text-gray-700 mb-2">{comment.content}</p>

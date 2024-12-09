@@ -16,7 +16,6 @@ const SignUpForm = () => {
 
   const handleLogin = (e: any) => {
     e.preventDefault();
-    console.log(username, password);
 
     AuthenticationService.register({ username, password })
       .then(() => {
