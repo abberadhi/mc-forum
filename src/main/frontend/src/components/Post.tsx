@@ -4,8 +4,19 @@ import {
 } from "@heroicons/react/24/solid";
 import { dateFormatter } from "../utils/dateFormatter";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { PostService } from "../services/PostService";
 
 const Post = ({ post }: any) => {
+  const [userHasLiked, setUserHasLiked] = useState<boolean>(post.hasLiked);
+  const [postLikes, setPostLikes] = useState<number>(post.upvoteCount);
+
+  const handleUserLiked = () => {
+    setUserHasLiked(!userHasLiked);
+    setPostLikes(postLikes + (!userHasLiked ? 1 : -1));
+    PostService.likePostById(post.id, !userHasLiked);
+  };
+
   return (
     <div className="mx-4 p-4 flex flex-row justify-center items-center">
       <div className="w-full bg-white max-w-full rounded overflow-hidden shadow-lg">
@@ -42,10 +53,15 @@ const Post = ({ post }: any) => {
         </div>
 
         <div className="px-6 pb-2">
-          <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+          <span
+            onClick={handleUserLiked}
+            className={`${
+              userHasLiked ? "bg-gray-500" : "bg-gray-400"
+            } inline-block  rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2`}
+          >
             <div className="flex items-center	">
               <HandThumbUpIcon className="size-6 text-white" />
-              <p className="px-1 text-white">1</p>
+              <p className="px-1 text-white">{postLikes}</p>
             </div>
           </span>
           <Link to={`/post/${post.id}`}>

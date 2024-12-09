@@ -4,6 +4,7 @@ export const PostService = {
   getPosts,
   createPost,
   getPostById,
+  likePostById,
 };
 
 async function getPosts(
@@ -33,6 +34,19 @@ async function getPosts(
 async function getPostById(id: number) {
   try {
     const response = await api.get(`/posts/${id}`);
+    const data = response.data;
+
+    return data;
+  } catch (error: any) {
+    throw error.response?.data || new Error("Fetching posts failed");
+  }
+}
+
+async function likePostById(id: number, likeAdded: boolean) {
+  try {
+    const response = await api.post(
+      `/posts/${id}/${!likeAdded ? "un" : ""}like`
+    );
     const data = response.data;
 
     return data;

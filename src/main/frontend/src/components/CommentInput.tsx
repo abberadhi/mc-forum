@@ -20,7 +20,7 @@ const CommentInput = () => {
   };
 
   return (
-    <div className="mx-4 p-4 flex flex-row justify-center items-center">
+    <div className="mx-4 px-4 flex flex-row justify-center items-center">
       <div className="w-full bg-white max-w-full rounded p-4 overflow-hidden shadow-lg">
         <form className="my-4 space-y-4">
           <div className="flex items-start space-x-4">
