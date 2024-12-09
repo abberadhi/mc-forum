@@ -19,6 +19,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
@@ -52,6 +54,14 @@ public class UserEntity implements UserDetails {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "bike_id", nullable = true)
     private BikeModelEntity bikeModelEntity;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_post_likes_entity",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "post_id")
+    )
+    private Set<PostEntity> userLikes = new HashSet<>();
 
     @PrePersist
     protected void onCreate() {
@@ -126,5 +136,13 @@ public class UserEntity implements UserDetails {
 
     public void setBikeModelEntity(BikeModelEntity bikeModelEntity) {
         this.bikeModelEntity = bikeModelEntity;
+    }
+
+    public Set<PostEntity> getUserLikes() {
+        return userLikes;
+    }
+
+    public void setUserLikes(Set<PostEntity> userLikes) {
+        this.userLikes = userLikes;
     }
 }

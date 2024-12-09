@@ -44,11 +44,7 @@ public class PostService {
         return postRepository.findById(id).orElse(null); // Optional handling
     }
 
-    // public List<PostEntity> getPostsByUserId(Long userId) {
-    //     return postRepository.findByUserId(userId);
-    // }
     public PostEntity createPost(PostEntity post) {
-        // System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
         Optional<UserEntity> user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         Set<TagEntity> tags = new HashSet<>();
         for (TagEntity tag : post.getTags()) {
@@ -60,7 +56,6 @@ public class PostService {
             tags.add(tagEntity);
         }
 
-        // System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
         if (user.isPresent()) {
             UserEntity u = user.get();
             post.setUser(u);
@@ -75,10 +70,46 @@ public class PostService {
         postRepository.deleteById(id);
     }
 
+    public void likePost(Long id) {
+        PostEntity post = postRepository.findById(id).orElse(null);
+        // Step 2: Retrieve the logged-in user
+        UserEntity user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).orElse(null);
+
+        // Step 3: Check if the user already liked the post
+        if (user.getUserLikes().contains(post)) {
+            return;
+        }
+
+        user.getUserLikes().add(post);
+
+        userRepository.save(user);
+    }
+
+    public void unlikePost(Long id) {
+        PostEntity post = postRepository.findById(id).orElse(null);
+        UserEntity user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).orElse(null);
+
+        if (!user.getUserLikes().contains(post)) {
+            return;
+        }
+
+        user.getUserLikes().remove(post);
+        userRepository.save(user);
+    }
+
+    public int getLikeCountByPostId(Long id) {
+        return postRepository.countLikesByPostId(id);
+    }
+
+    public boolean authUserHasLikedPost(Long id) {
+        PostEntity post = postRepository.findById(id).orElse(null);
+        UserEntity user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).orElse(null);
+        return user.getUserLikes().contains(post);
+    }
+
     public void updatePost(Long id, PostEntity updatedPost) {
         PostEntity post = postRepository.findById(id).orElseThrow(() -> new RuntimeException("Post not found")); // fix handling
 
-        // Update the fields
         if (updatedPost.getTitle() != null) {
             post.setTitle(updatedPost.getTitle());
         }

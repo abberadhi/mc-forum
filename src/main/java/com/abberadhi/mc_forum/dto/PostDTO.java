@@ -20,5 +20,7 @@ public class PostDTO {
     private Set<TagEntity> tags;
     private Integer authorId;
     private String authorUserName;
+    private boolean hasLiked;
+    private int upvoteCount;
     private int commentCount;
 }

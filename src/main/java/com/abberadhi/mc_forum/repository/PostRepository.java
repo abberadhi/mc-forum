@@ -29,5 +29,6 @@ public interface PostRepository extends JpaRepository<PostEntity, Long> {
 
     Page<PostEntity> findAllWithFilters(@Param("postTitle") String postTitle, @Param("tagName") String tagName, @Param("userEntity") UserEntity userEntity, Pageable pageable);
 
-    // Add more query methods as needed
+    @Query("SELECT COUNT(u) FROM UserEntity u JOIN u.userLikes p WHERE p.id = :postId")
+    int countLikesByPostId(@Param("postId") Long postId);
 }

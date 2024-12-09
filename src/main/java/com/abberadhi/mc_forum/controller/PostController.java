@@ -87,6 +87,18 @@ public class PostController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @PostMapping("/{id}/like")
+    public ResponseEntity<Void> likePost(@PathVariable Long id) {
+        postService.likePost(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/{id}/unlike")
+    public ResponseEntity<Void> unlikePost(@PathVariable Long id) {
+        postService.unlikePost(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @PatchMapping("/{id}")
     public ResponseEntity<Void> updatePost(@PathVariable Long id, @RequestBody PostEntity post) {
         postService.updatePost(id, post);
@@ -107,7 +119,9 @@ public class PostController {
         dto.setCreatedAt(postEntity.getCreatedAt());
         dto.setUpdatedAt(postEntity.getUpdatedAt());
         dto.setTags(postEntity.getTags());
+        dto.setUpvoteCount(postService.getLikeCountByPostId(postEntity.getId()));
         dto.setCommentCount(commentService.getCommentCountByPost(postEntity));
+        dto.setHasLiked(postService.authUserHasLikedPost(postEntity.getId()));
 
         return dto;
     }

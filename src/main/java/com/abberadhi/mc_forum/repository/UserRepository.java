@@ -9,6 +9,6 @@ import com.abberadhi.mc_forum.model.UserEntity;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Integer> {
-    
+
     Optional<UserEntity> findByUsername(String username);
 }
