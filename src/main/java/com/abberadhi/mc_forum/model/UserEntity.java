@@ -63,6 +63,14 @@ public class UserEntity implements UserDetails {
     )
     private Set<PostEntity> userLikes = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(
+            name = "user_comment_likes_entity",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "comment_id")
+    )
+    private Set<CommentEntity> userCommentLikes = new HashSet<>();
+
     @PrePersist
     protected void onCreate() {
         this.dateJoined = LocalDateTime.now();
@@ -144,5 +152,13 @@ public class UserEntity implements UserDetails {
 
     public void setUserLikes(Set<PostEntity> userLikes) {
         this.userLikes = userLikes;
+    }
+
+    public Set<CommentEntity> getUserCommentLikes() {
+        return userCommentLikes;
+    }
+
+    public void setUserCommentLikes(Set<CommentEntity> userCommentLikes) {
+        this.userCommentLikes = userCommentLikes;
     }
 }

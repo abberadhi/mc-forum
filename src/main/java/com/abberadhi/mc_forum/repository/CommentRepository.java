@@ -21,4 +21,7 @@ public interface CommentRepository extends JpaRepository<CommentEntity, Long> {
 
     @Query("SELECT COUNT(c) FROM CommentEntity c WHERE c.postEntity = :postEntity")
     int findCountByPostEntity(@Param("postEntity") PostEntity postEntity);
+
+    @Query("SELECT COUNT(u) FROM UserEntity u JOIN u.userCommentLikes c WHERE c.id = :commentId")
+    int countLikesByCommentId(@Param("commentId") Integer commentId);
 }

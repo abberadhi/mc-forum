@@ -44,6 +44,42 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
+    public int getLikeCountByCommentId(Integer id) {
+        return commentRepository.countLikesByCommentId(id);
+    }
+
+    public boolean authUserHasLikedComment(Integer id) {
+        CommentEntity comment = commentRepository.findById(id).orElse(null);
+        UserEntity user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).orElse(null);
+        return user.getUserCommentLikes().contains(comment);
+    }
+
+    public void likeComment(Long id) {
+        CommentEntity comment = commentRepository.findById(id).orElse(null);
+        UserEntity user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).orElse(null);
+
+        // Step 3: Check if the user already liked the post
+        if (user.getUserCommentLikes().contains(comment)) {
+            return;
+        }
+
+        user.getUserCommentLikes().add(comment);
+
+        userRepository.save(user);
+    }
+
+    public void unlikeComment(Long id) {
+        CommentEntity comment = commentRepository.findById(id).orElse(null);
+        UserEntity user = userRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).orElse(null);
+
+        if (!user.getUserCommentLikes().contains(comment)) {
+            return;
+        }
+
+        user.getUserCommentLikes().remove(comment);
+        userRepository.save(user);
+    }
+
     public List<CommentEntity> getCommentsByPostId(Long id) {
         PostEntity postEntity = postService.getPostById(id);
         return commentRepository.findByPostEntity(postEntity);

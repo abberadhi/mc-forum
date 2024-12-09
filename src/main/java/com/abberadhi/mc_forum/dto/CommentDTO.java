@@ -11,6 +11,7 @@ public class CommentDTO {
     private Integer user_id;
     private String username;
     private int upvoteCount;
+    private boolean hasLiked;
 
     public int getUpvoteCount() {
         return upvoteCount;
@@ -66,6 +67,14 @@ public class CommentDTO {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public boolean isHasLiked() {
+        return hasLiked;
+    }
+
+    public void setHasLiked(boolean hasLiked) {
+        this.hasLiked = hasLiked;
     }
 
 }
