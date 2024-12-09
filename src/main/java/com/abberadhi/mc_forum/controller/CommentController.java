@@ -99,6 +99,8 @@ public class CommentController {
         dto.setCreatedAt(commentEntity.getCreatedAt());
         dto.setUpvoteCount(commentEntity.getUpvoteCount());
         dto.setUser_id(commentEntity.getUserEntity().getId());
+        dto.setUsername(commentEntity.getUserEntity().getUsername());
+
         if (commentEntity.getParentCommentEntity() != null) {
             dto.setParent_id(commentEntity.getParentCommentEntity().getId());
         }

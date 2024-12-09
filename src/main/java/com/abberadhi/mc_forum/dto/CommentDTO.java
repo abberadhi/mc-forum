@@ -3,11 +3,13 @@ package com.abberadhi.mc_forum.dto;
 import java.time.LocalDateTime;
 
 public class CommentDTO {
+
     private Integer id;
     private String commentContent;
     private LocalDateTime createdAt;
     private Integer parent_id;
     private Integer user_id;
+    private String username;
     private int upvoteCount;
 
     public int getUpvoteCount() {
@@ -58,5 +60,12 @@ public class CommentDTO {
         this.user_id = user_id;
     }
 
-    
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
 }
