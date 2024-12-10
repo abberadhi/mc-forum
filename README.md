@@ -2,6 +2,14 @@
 
 Forum about motorcycles. Uses Java Spring, React and PostgreSQL
 
+## Features:
+
+- User profile
+- Creation of post
+- Tags
+- Comments & Reply to comments
+- Upvote comments & posts
+
 # Setup
 
 1. Clone the repo
