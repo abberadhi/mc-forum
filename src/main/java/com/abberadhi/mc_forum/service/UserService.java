@@ -1,12 +1,18 @@
 package com.abberadhi.mc_forum.service;
 
+import java.util.List;
 import java.util.Objects;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import com.abberadhi.mc_forum.model.CommentEntity;
 import com.abberadhi.mc_forum.model.UserEntity;
+import com.abberadhi.mc_forum.repository.CommentRepository;
 import com.abberadhi.mc_forum.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -16,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
 
     public UserEntity getUserById(Integer id) {
         return userRepository.findById(id).orElse(null);
@@ -48,6 +55,14 @@ public class UserService {
         }
 
         userRepository.save(user);
+    }
+
+    public List<CommentEntity> getUserActivityByUsername(String username) {
+        UserEntity user = userRepository.findByUsername(username).get();
+        Pageable page = PageRequest.of(0, 10, Sort.by("createdAt"));
+        List<CommentEntity> recentComments = commentRepository.findAllByUserId(user.getId(), page);
+
+        return recentComments;
     }
 
     public UserEntity getUserByUsername(String username) {

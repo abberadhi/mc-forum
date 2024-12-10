@@ -1,5 +1,8 @@
 package com.abberadhi.mc_forum.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,8 +12,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.abberadhi.mc_forum.dto.CommentDTO;
 import com.abberadhi.mc_forum.dto.UserDTO;
+import com.abberadhi.mc_forum.model.CommentEntity;
 import com.abberadhi.mc_forum.model.UserEntity;
+import com.abberadhi.mc_forum.service.CommentService;
 import com.abberadhi.mc_forum.service.UserService;
 
 @RestController
@@ -18,9 +24,11 @@ import com.abberadhi.mc_forum.service.UserService;
 public class UserController {
 
     private final UserService userService;
+    private final CommentService commentService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, CommentService commentService) {
         this.userService = userService;
+        this.commentService = commentService;
     }
 
     @GetMapping("/{id}")
@@ -35,6 +43,16 @@ public class UserController {
         UserEntity user = userService.getUserByUsername(username);
         UserDTO u = mapToUserDTO(user);
         return new ResponseEntity<>(u, HttpStatus.OK);
+    }
+
+    @GetMapping("/activity/{username}")
+    public ResponseEntity<List<CommentDTO>> getUserActivity(@PathVariable String username) {
+        List<CommentEntity> comments = userService.getUserActivityByUsername(username);
+        List<CommentDTO> commentDTO = comments.stream()
+                .map(commentService::mapToCommentDTO)
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(commentDTO, HttpStatus.OK);
     }
 
     @PatchMapping("/{id}")

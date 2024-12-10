@@ -40,7 +40,7 @@ public class CommentController {
 
         List<CommentEntity> postComments = commentService.getCommentsByPostId(postId);
         List<CommentDTO> commentDTO = postComments.stream()
-                .map(this::mapToCommentDTO)
+                .map(commentService::mapToCommentDTO)
                 .collect(Collectors.toList());
 
         return new ResponseEntity<>(commentDTO, HttpStatus.OK);
@@ -55,7 +55,7 @@ public class CommentController {
         }
 
         CommentEntity createdComment = commentService.createComment(post, null, comment);
-        CommentDTO createdCommentDTO = mapToCommentDTO(createdComment);
+        CommentDTO createdCommentDTO = commentService.mapToCommentDTO(createdComment);
         return new ResponseEntity<>(createdCommentDTO, HttpStatus.OK);
     }
 
@@ -73,7 +73,7 @@ public class CommentController {
         }
 
         CommentEntity createdComment = commentService.createComment(post, parentComment, comment);
-        CommentDTO createdCommentDTO = mapToCommentDTO(createdComment);
+        CommentDTO createdCommentDTO = commentService.mapToCommentDTO(createdComment);
 
         return new ResponseEntity<>(createdCommentDTO, HttpStatus.OK);
     }
@@ -98,25 +98,5 @@ public class CommentController {
     public ResponseEntity<Void> unlikeComment(@PathVariable Long id) {
         commentService.unlikeComment(id);
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    public CommentDTO mapToCommentDTO(CommentEntity commentEntity) {
-        if (commentEntity == null) {
-            return null;
-        }
-
-        CommentDTO dto = new CommentDTO();
-        dto.setId(commentEntity.getId());
-        dto.setCommentContent(commentEntity.getCommentContent());
-        dto.setCreatedAt(commentEntity.getCreatedAt());
-        dto.setUpvoteCount(commentService.getLikeCountByCommentId(commentEntity.getId()));
-        dto.setUser_id(commentEntity.getUserEntity().getId());
-        dto.setUsername(commentEntity.getUserEntity().getUsername());
-        dto.setHasLiked(commentService.authUserHasLikedComment(commentEntity.getId()));
-
-        if (commentEntity.getParentCommentEntity() != null) {
-            dto.setParent_id(commentEntity.getParentCommentEntity().getId());
-        }
-        return dto;
     }
 }

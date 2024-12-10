@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.abberadhi.mc_forum.dto.CommentDTO;
 import com.abberadhi.mc_forum.model.CommentEntity;
 import com.abberadhi.mc_forum.model.PostEntity;
 import com.abberadhi.mc_forum.model.TagEntity;
@@ -95,5 +96,25 @@ public class CommentService {
 
     public void deleteCommentById(Long id) {
         commentRepository.deleteById(id);
+    }
+
+    public CommentDTO mapToCommentDTO(CommentEntity commentEntity) {
+        if (commentEntity == null) {
+            return null;
+        }
+
+        CommentDTO dto = new CommentDTO();
+        dto.setId(commentEntity.getId());
+        dto.setCommentContent(commentEntity.getCommentContent());
+        dto.setCreatedAt(commentEntity.getCreatedAt());
+        dto.setUpvoteCount(getLikeCountByCommentId(commentEntity.getId()));
+        dto.setUser_id(commentEntity.getUserEntity().getId());
+        dto.setUsername(commentEntity.getUserEntity().getUsername());
+        dto.setHasLiked(authUserHasLikedComment(commentEntity.getId()));
+
+        if (commentEntity.getParentCommentEntity() != null) {
+            dto.setParent_id(commentEntity.getParentCommentEntity().getId());
+        }
+        return dto;
     }
 }
