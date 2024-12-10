@@ -3,6 +3,7 @@ import api from "./api";
 export const CommentService = {
   getCommentByPostId,
   createComment,
+  likeCommentById,
 };
 
 async function getCommentByPostId(id: number) {
@@ -36,6 +37,19 @@ async function createComment(
   return data;
 }
 
+async function likeCommentById(id: string, likeAdded: boolean) {
+  try {
+    const response = await api.post(
+      `/comments/${id}/${!likeAdded ? "un" : ""}like`
+    );
+    const data = response.data;
+
+    return data;
+  } catch (error: any) {
+    throw error.response?.data || new Error("Fetching posts failed");
+  }
+}
+
 function commentDTO(comments: any) {
   const map = new Map();
 
@@ -45,6 +59,8 @@ function commentDTO(comments: any) {
       id: comment.id.toString(),
       user: comment.username,
       content: comment.commentContent,
+      upvoteCount: comment.upvoteCount,
+      hasLiked: comment.hasLiked,
       date: new Date(comment.createdAt).toISOString(),
       replies: [],
     });

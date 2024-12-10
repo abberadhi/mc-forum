@@ -1,4 +1,4 @@
-import { PlusIcon } from "@heroicons/react/24/solid";
+import { HandThumbUpIcon, PlusIcon } from "@heroicons/react/24/solid";
 import React, { useState } from "react";
 import { CommentModel } from "../models/CommentModel";
 import { Button, Textarea } from "@headlessui/react";
@@ -11,8 +11,16 @@ const Comments: React.FC<{ comment: CommentModel; level?: number }> = ({
 }) => {
   const [showReply, setShowReply] = useState(false);
   const [commentContent, setCommentContent] = useState<string>("");
+  const [userHasLiked, setUserHasLiked] = useState<boolean>(comment.hasLiked);
+  const [commentLikes, setCommentLikes] = useState<number>(comment.upvoteCount);
 
   const param: any = useParams();
+
+  const handleUserLiked = () => {
+    setUserHasLiked(!userHasLiked);
+    setCommentLikes(commentLikes + (!userHasLiked ? 1 : -1));
+    CommentService.likeCommentById(comment.id, !userHasLiked);
+  };
 
   const handleShowReply = () => {
     setShowReply(!showReply);
@@ -41,13 +49,22 @@ const Comments: React.FC<{ comment: CommentModel; level?: number }> = ({
             <span className="text-gray-500 text-sm">{comment.date}</span>
           </div>
           <p className="text-gray-700 mb-2">{comment.content}</p>
-          <button
-            onClick={handleShowReply}
-            className="text-bold text-blue-500 text-sm flex items-center"
-          >
-            <PlusIcon className="w-4 h-4 mr-1" />
-            Reply
-          </button>
+          <div className="flex gap-4	">
+            <button
+              onClick={handleUserLiked}
+              className="text-bold text-blue-500 text-sm flex items-center"
+            >
+              <HandThumbUpIcon className="w-4 h-4 mr-1" />
+              {commentLikes}
+            </button>
+            <button
+              onClick={handleShowReply}
+              className="text-bold text-blue-500 text-sm flex items-center"
+            >
+              <PlusIcon className="w-4 h-4 mr-1" />
+              Reply
+            </button>
+          </div>
           {showReply ? (
             <form className="my-4 space-y-4">
               <div className="flex items-start space-x-4">
