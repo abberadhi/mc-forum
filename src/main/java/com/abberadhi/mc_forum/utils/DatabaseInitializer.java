@@ -1,5 +1,8 @@
 package com.abberadhi.mc_forum.utils;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.List;
 
 import org.springframework.boot.CommandLineRunner;
@@ -18,7 +21,6 @@ import com.abberadhi.mc_forum.repository.TagRepository;
 import com.abberadhi.mc_forum.repository.UserRepository;
 
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @Component
@@ -33,16 +35,31 @@ public class DatabaseInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        String filePathBikes = new ClassPathResource("data/bikes-list.csv").getFile().getAbsolutePath();
-        String filePathUsers = new ClassPathResource("data/users-list.csv").getFile().getAbsolutePath();
-        String filePathTags = new ClassPathResource("data/tag-list.csv").getFile().getAbsolutePath();
-        String filePathPosts = new ClassPathResource("data/post-list.csv").getFile().getAbsolutePath();
-        String filePathComments = new ClassPathResource("data/comments-list.csv").getFile().getAbsolutePath();
-        populateBikeTable(filePathBikes);
-        populateUserTable(filePathUsers);
-        populateTagsTable(filePathTags);
-        populatePostsTable(filePathPosts);
-        populateCommentsTable(filePathComments);
+        String bikesFile = loadFilePath("data/bikes-list.csv");
+        String usersFile = loadFilePath("data/users-list.csv");
+        String tagsFile = loadFilePath("data/tag-list.csv");
+        String postsFile = loadFilePath("data/post-list.csv");
+        String commentsFile = loadFilePath("data/comments-list.csv");
+
+        populateBikeTable(bikesFile);
+        populateUserTable(usersFile);
+        populateTagsTable(tagsFile);
+        populatePostsTable(postsFile);
+        populateCommentsTable(commentsFile);
+    }
+
+    private String loadFilePath(String resourcePath) throws Exception {
+        try (InputStream inputStream = new ClassPathResource(resourcePath).getInputStream()) {
+            // Create a temporary file to work with the resource
+            File tempFile = File.createTempFile("resource", null);
+            tempFile.deleteOnExit();
+
+            // Copy the resource content to the temporary file
+            try (FileOutputStream out = new FileOutputStream(tempFile)) {
+                inputStream.transferTo(out);
+            }
+            return tempFile.getAbsolutePath();
+        }
     }
 
     private void populateBikeTable(String filePath) {
