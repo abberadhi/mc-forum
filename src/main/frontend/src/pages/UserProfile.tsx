@@ -9,6 +9,7 @@ import { UserService } from "../services/UserService";
 import { UserDataModel } from "../models/UserDataModel";
 import NotFound from "./NotFound";
 import NoPosts from "../components/NoPosts";
+import UserActivity from "../components/UserActivity";
 
 const UserProfile = () => {
   const [error, setError] = useState("");
@@ -59,8 +60,9 @@ const UserProfile = () => {
   return (
     <>
       <main className="flex">
-        <div className="w-96">
+        <div className="flex-col w-96">
           <UserProfileCard profile={user}></UserProfileCard>
+          <UserActivity></UserActivity>
         </div>
         <div className="flex-1 w-64">
           <SearchBar onSearchChanged={onSearchChanged} />

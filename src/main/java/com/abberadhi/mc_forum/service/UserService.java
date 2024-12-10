@@ -59,7 +59,7 @@ public class UserService {
 
     public List<CommentEntity> getUserActivityByUsername(String username) {
         UserEntity user = userRepository.findByUsername(username).get();
-        Pageable page = PageRequest.of(0, 10, Sort.by("createdAt"));
+        Pageable page = PageRequest.of(0, 5, Sort.by("createdAt"));
         List<CommentEntity> recentComments = commentRepository.findAllByUserId(user.getId(), page);
 
         return recentComments;

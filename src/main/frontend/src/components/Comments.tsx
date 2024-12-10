@@ -4,6 +4,7 @@ import { CommentModel } from "../models/CommentModel";
 import { Button, Textarea } from "@headlessui/react";
 import { CommentService } from "../services/CommentService";
 import { useParams } from "react-router-dom";
+import { dateFormatter } from "../utils/dateFormatter";
 
 const Comments: React.FC<{ comment: CommentModel; level?: number }> = ({
   comment,
@@ -46,7 +47,9 @@ const Comments: React.FC<{ comment: CommentModel; level?: number }> = ({
         <div className="flex-1">
           <div className="flex items-center mb-1">
             <span className="font-semibold mr-2">{comment.user}</span>
-            <span className="text-gray-500 text-sm">{comment.date}</span>
+            <span className="text-gray-500 text-sm">
+              {dateFormatter.dateDistance(comment.date)}
+            </span>
           </div>
           <p className="text-gray-700 mb-2">{comment.content}</p>
           <div className="flex gap-4	">

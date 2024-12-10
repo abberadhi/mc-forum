@@ -5,6 +5,7 @@ export const UserService = {
   getUserDataById,
   getUserDataByUsername,
   updateUserData,
+  getUserActivity,
 };
 
 async function getUserDataById(id: any): Promise<UserDataModel> {
@@ -18,7 +19,7 @@ async function getUserDataById(id: any): Promise<UserDataModel> {
   }
 }
 
-async function getUserDataByUsername(username: string) {
+async function getUserDataByUsername(username: string | any) {
   try {
     const response = await api.get(`/user/details/${username}`);
     const data = response.data;
@@ -38,4 +39,16 @@ async function updateUserData(id: any, userData: any) {
   } catch (error: any) {
     throw error.response?.data || new Error("Register failed");
   }
+}
+
+async function getUserActivity(username: string) {
+  let data: any;
+  try {
+    const response = await api.get(`/user/activity/${username}`);
+    data = response.data;
+  } catch (error: any) {
+    throw error.response?.data || new Error("Fetching posts failed");
+  }
+
+  return data;
 }
